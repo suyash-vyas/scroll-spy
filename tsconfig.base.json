@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    // Root paths (overridden in child configs for outDir)
+    "rootDir": "src",
+    "declarationDir": "dist/types",
+
+    // Target
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+
+    // React
+    "jsx": "react-jsx",
+
+    // Declarations (critical for libraries)
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Interop
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+
+    // Strict
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Build
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "removeComments": true
+  },
+  "include": ["./**/*.ts", "src", "tsconfig.esm.json", "tsconfig.cjs.json"],
+  "exclude": ["node_modules", "dist"]
+}
