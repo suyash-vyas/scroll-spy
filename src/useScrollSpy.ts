@@ -1,5 +1,4 @@
 // libs
-import _debounce from "lodash/debounce";
 import { useEffect, useState, useCallback } from "react";
 
 // helpers
@@ -24,7 +23,7 @@ export const useScrollSpy = ({
       }
 
       return getInitialActiveHeadingId({ firstHeading });
-    }
+    },
   );
 
   const onScrollEnd = useCallback<() => void>(() => {
@@ -56,7 +55,7 @@ export const useScrollSpy = ({
       */
       setActiveHeadingId(lastHeading.id);
     }
-  }, [headings]);
+  }, [firstHeading, lastHeading]);
 
   useEffect(() => {
     if (!headings.length) return;
@@ -89,7 +88,7 @@ export const useScrollSpy = ({
       {
         rootMargin,
         threshold: 0,
-      }
+      },
     );
 
     headings.forEach((heading) => observer.observe(heading));

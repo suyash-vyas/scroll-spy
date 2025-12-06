@@ -43,6 +43,6 @@
     "skipLibCheck": true,
     "removeComments": true
   },
-  "include": ["src"],
+  "include": ["./**/*.ts", "src", "tsconfig.esm.json", "tsconfig.cjs.json"],
   "exclude": ["node_modules", "dist"]
 }
