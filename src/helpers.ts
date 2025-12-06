@@ -4,11 +4,9 @@ export const isFirstHeadingVisible = ({
   firstHeading,
   threshold = DEFAULT_THRESHOLD_FOR_FIRST_HEADING,
 }: {
-  firstHeading?: HTMLHeadingElement;
+  firstHeading: HTMLHeadingElement;
   threshold?: number;
 }): boolean => {
-  if (!firstHeading) return false;
-
   const rect = firstHeading.getBoundingClientRect();
 
   if (rect.top >= 0 && rect.bottom <= window.innerHeight * threshold) {

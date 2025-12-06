@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "dist/esm",
+
+    // ESM-specific: enforces type-only imports
+    "verbatimModuleSyntax": true
+  }
+}

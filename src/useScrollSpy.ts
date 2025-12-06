@@ -1,45 +1,62 @@
 // libs
 import _debounce from "lodash/debounce";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // helpers
 import { getInitialActiveHeadingId, isFirstHeadingVisible } from "./helpers";
 
+export type UseScrollSpyProps = {
+  headings: HTMLHeadingElement[];
+  offset: number;
+};
+
 export const useScrollSpy = ({
   headings,
   offset,
-}: {
-  headings: HTMLHeadingElement[];
-  offset: number;
-}): string | undefined => {
+}: UseScrollSpyProps): string | undefined => {
+  const firstHeading = headings[0];
+  const lastHeading = headings.at(-1);
+
   const [activeHeadingId, setActiveHeadingId] = useState<string | undefined>(
-    () => getInitialActiveHeadingId({ firstHeading: headings[0] })
+    () => {
+      if (!firstHeading) {
+        return undefined;
+      }
+
+      return getInitialActiveHeadingId({ firstHeading });
+    }
   );
 
-  // Replace with scrollend event when it is widely supported by browsers.
-  const onScroll = useCallback<() => void>(() => {
+  const onScrollEnd = useCallback<() => void>(() => {
+    if (!firstHeading || !lastHeading) {
+      return;
+    }
+
     const element = document.scrollingElement;
 
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const top = element.scrollTop;
 
-    if (top <= 0) {
-      if (isFirstHeadingVisible({ firstHeading: headings[0] })) {
-        setActiveHeadingId(headings[0].id);
+    if (top <= 0 && firstHeading) {
+      if (isFirstHeadingVisible({ firstHeading })) {
+        setActiveHeadingId(firstHeading.id);
       } else {
         setActiveHeadingId(undefined);
       }
-    } else if (top + element.clientHeight >= element.scrollHeight - 6) {
+    } else if (
+      top + element.clientHeight >= element.scrollHeight - 6 &&
+      lastHeading
+    ) {
       /* 
         6px buffer because sometimes the scrollHeight is not exactly the same as the clientHeight due to rounding errors.
         See: https://stackoverflow.com/questions/3898130/check-if-a-user-has-scrolled-to-the-bottom-not-just-the-window-but-any-element
       */
-      setActiveHeadingId(headings[headings.length - 1].id);
+      setActiveHeadingId(lastHeading.id);
     }
   }, [headings]);
-
-  const debouncedOnScroll = useMemo(() => _debounce(onScroll, 500), [onScroll]);
 
   useEffect(() => {
     if (!headings.length) return;
@@ -84,13 +101,13 @@ export const useScrollSpy = ({
 
       Ref: https://stackoverflow.com/questions/61951380/intersection-observer-fails-sometimes-when-i-scroll-fast 
     */
-    window.addEventListener("scroll", debouncedOnScroll);
+    window.addEventListener("scrollend", onScrollEnd);
 
     return () => {
-      window.removeEventListener("scroll", debouncedOnScroll);
+      window.removeEventListener("scrollend", onScrollEnd);
       observer.disconnect();
     };
-  }, [headings, offset, debouncedOnScroll]);
+  }, [headings, offset, onScrollEnd]);
 
   return activeHeadingId;
 };
