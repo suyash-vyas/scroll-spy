@@ -9,25 +9,27 @@ import { SECTIONS } from "./constants";
 
 // types
 import type { ReactElement } from "react";
+import type { StoryProps } from "./useScrollSpy.stories";
 
-export const Demo = ({ offset }: { offset: number }): ReactElement => {
+export const Demo = ({
+  offset,
+  showObservedArea,
+}: StoryProps): ReactElement => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [headings, setHeadings] = useState<HTMLHeadingElement[]>([]);
-  const [bandHeight, setBandHeight] = useState<number>(0);
+  const [observedAreaHeight, setObservedAreaHeight] = useState<number>(0);
 
   useEffect(() => {
     if (containerRef.current) {
       const elements = Array.from(
         containerRef.current.querySelectorAll("h2[id]"),
       ) as HTMLHeadingElement[];
+
       setHeadings(elements);
 
-      // Calculate the intersection band height (same as useScrollSpy)
       if (elements.length > 0) {
-        const intersectionHeight = Math.min(
-          ...elements.map((h) => h.offsetHeight),
-        );
-        setBandHeight(intersectionHeight);
+        const areaHeight = Math.min(...elements.map((h) => h.offsetHeight));
+        setObservedAreaHeight(areaHeight);
       }
     }
   }, []);
@@ -47,17 +49,15 @@ export const Demo = ({ offset }: { offset: number }): ReactElement => {
 
   return (
     <div style={{ display: "flex" }} ref={containerRef}>
-      {bandHeight > 0 && (
+      {showObservedArea && observedAreaHeight > 0 && (
         <div
           style={{
             position: "fixed",
             top: offset,
             left: 0,
             right: 0,
-            height: bandHeight,
-            background: "rgba(255, 0, 0, 0.15)",
-            borderTop: "2px solid rgba(255, 0, 0, 0.6)",
-            borderBottom: "2px solid rgba(255, 0, 0, 0.6)",
+            height: observedAreaHeight,
+            background: "rgba(255, 0, 0, 0.10)",
             zIndex: 9999,
             pointerEvents: "none",
           }}
@@ -87,7 +87,7 @@ export const Demo = ({ offset }: { offset: number }): ReactElement => {
 
       <main style={{ marginLeft: 220, padding: 16, maxWidth: 600 }}>
         <h1>useScrollSpy</h1>
-        <p>A scroll-tracking hook for React.</p>
+        <p>A scroll-tracking hook for react.</p>
 
         {SECTIONS.map((section) => (
           <section key={section.id} style={{ marginBottom: 32 }}>
@@ -113,8 +113,7 @@ export const Demo = ({ offset }: { offset: number }): ReactElement => {
           Active: <strong>{activeHeadingId || "—"}</strong>
         </div>
         <div style={{ color: "#666", marginTop: 4 }}>
-          Observed area: {offset}px – {offset + bandHeight}px ({bandHeight}px
-          height)
+          Observed area height: {observedAreaHeight}px
         </div>
       </div>
     </div>

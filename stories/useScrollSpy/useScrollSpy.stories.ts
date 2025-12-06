@@ -7,7 +7,11 @@ import { Demo } from "./Demo";
 // types
 import type { UseScrollSpyProps } from "../../src/useScrollSpy";
 
-const meta: Meta<UseScrollSpyProps> = {
+export type StoryProps = UseScrollSpyProps & {
+  showObservedArea: boolean;
+};
+
+const meta: Meta<StoryProps> = {
   component: Demo,
   argTypes: {
     offset: {
@@ -18,15 +22,19 @@ const meta: Meta<UseScrollSpyProps> = {
         step: 1,
       },
     },
+    showObservedArea: {
+      control: {
+        type: "boolean",
+      },
+    },
+  },
+};
+
+export const ScrollSpy: StoryObj<StoryProps> = {
+  args: {
+    offset: 50,
+    showObservedArea: true,
   },
 };
 
 export default meta;
-
-type Story = StoryObj<UseScrollSpyProps>;
-
-export const ScrollSpy: Story = {
-  args: {
-    offset: 50,
-  },
-};
