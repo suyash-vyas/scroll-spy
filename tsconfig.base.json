@@ -13,8 +13,7 @@
 
     // Declarations (critical for libraries)
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "sourceMap": false,
 
     // Interop
     "esModuleInterop": true,
@@ -41,8 +40,12 @@
     // Build
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "removeComments": true
+    "removeComments": true,
+
+    // Good to have
+    "pretty": true,
+    "importHelpers": true
   },
-  "include": ["./**/*.ts", "src", "tsconfig.esm.json", "tsconfig.cjs.json"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
